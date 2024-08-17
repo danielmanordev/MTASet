@@ -42,7 +42,7 @@ public class Benchmark {
 
       //  qqSystem.out.println("Scan 32k, 80% Insert 20% Delete - START");
 
-     System.out.println("OCCABTreeWithScanSet");
+    /* System.out.println("OCCABTreeWithScanSet");
       var occabScan8020 = new PutOnlyBenchmark(new OCCABTreeWithScanSet(2,256),7);
        occabScan8020.run();
        System.out.println("MTASet");
@@ -59,10 +59,21 @@ public class Benchmark {
         System.out.println("MTASet");
         var mtaSetScan3280insert320Delete = new InsertDeleteGetBenchmark(new MTASet(2,256),0,0,100,7);
         mtaSetScan3280insert320Delete.run();
+        ;*/
+
+        System.out.println("MTASet");
+        var get9091 = new Get90Insert9Delete1(new MTASet(2,256));
+        get9091.run();
+
+
+        System.out.println("OCCABTreeWithScanSet");
+        var get9091occ = new Get90Insert9Delete1(new OCCABTreeWithScanSet(2,256));
+        get9091occ.run();
+
         System.out.println("JavaConcurrentSkipList");
-        var jcsScan3280insert20D3elete = new InsertDeleteGetBenchmark(new JavaConcurrentSkipList(),0,0,100,7);
-        jcsScan3280insert20D3elete.run();
-        System.out.println("GO- END");
+        var get9091jcc = new Get90Insert9Delete1(new JavaConcurrentSkipList());
+        get9091jcc.run();
+
 
 
       /*  System.out.println("MTASet");

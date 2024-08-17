@@ -1044,7 +1044,11 @@ public class OCCABTree {
             int val = NULL;
             for (int keyIndex = 0; keyIndex < this.maxNodeSize; keyIndex++) {
                 if (leaf.keys[keyIndex] == key) {
-                    val = leaf.values[keyIndex].getLatestValue();
+                    var vc = leaf.values[keyIndex];
+                    if(vc == null){
+                        break;
+                    }
+                    val = vc.getLatestValue();
                     break;
                 }
             }
