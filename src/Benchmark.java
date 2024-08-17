@@ -61,9 +61,9 @@ public class Benchmark {
         mtaSetScan3280insert320Delete.run();
         ;*/
 
-        System.out.println("MTASet");
+       /* System.out.println("MTASet");
         var get9091 = new Get90Insert9Delete1(new MTASet(2,256));
-        get9091.run();
+        get9091.run();*/
 
 
         System.out.println("OCCABTreeWithScanSet");

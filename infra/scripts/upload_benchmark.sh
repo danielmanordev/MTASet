@@ -1,2 +1,2 @@
 #!/bin/bash
-scp -r /home/daniel/workspace/thesis/concurrent_abtree/out/production/concurrent_abtree/Benchmark.class adminuser@${VM_IP}:/home/adminuser/occab
+scp -r /home/daniel/workspace/MTASet/out/production/MTASet/Benchmark.class adminuser@${VM_IP}:/home/adminuser/mtaset
