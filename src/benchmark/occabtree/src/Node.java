@@ -1,7 +1,4 @@
-package benchmark.occabtreewithscan.src;
-
-import abstractions.Lock;
-import locks.MCSLock;
+package benchmark.occabtree.src;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -9,11 +6,8 @@ public class Node {
 
     private boolean marked;
     private boolean isLeaf = false;
-    public Node left;
-    public Node right;
-
     public boolean isTagged = false;
-    private final boolean isEntry = false;
+    private boolean isEntry = false;
 
     private boolean weight = false;
 
@@ -22,19 +16,19 @@ public class Node {
         this.size = size;
         this.searchKey = searchKey;
         this.keys = new int[maxNodeSize];
-        this.values = new ValueCell[maxNodeSize];
+        this.values = new int[maxNodeSize];
         this.nodes = new Node[maxNodeSize];
-
     }
 
     public int size;
     public int[] keys;
     public volatile int ver = 0;
-    public ValueCell[] values;
+    public int[] values;
     public Node[] nodes;
     public int searchKey;
 
     public Lock lock = new MCSLock();
+
 
     public boolean isLeaf() {
         return this.isLeaf;
@@ -47,6 +41,7 @@ public class Node {
     public boolean isMarked(){
         return this.marked;
     }
+
 
     public boolean getWeight(){
         return this.weight;

@@ -7,11 +7,11 @@ import java.util.ArrayList;
 
 public class ScanOnlyBenchmark implements Test {
     Set set;
-    int maxNumberOfScanThreads;
+    int numberOfTests;
 
-    public ScanOnlyBenchmark(Set set, int maxNumberOfScanThreads){
+    public ScanOnlyBenchmark(Set set, int numberOfTests){
         this.set = set;
-        this.maxNumberOfScanThreads = maxNumberOfScanThreads;
+        this.numberOfTests = numberOfTests;
     }
 
      public void run(){
@@ -19,7 +19,7 @@ public class ScanOnlyBenchmark implements Test {
         int dataRange = 1000000;
         int numberOfThreads = 1;
         int numberOfScanThreads = 1;//Integer.parseInt(args[0]);
-        int numberOfTests = maxNumberOfScanThreads;
+        int numberOfTests = this.numberOfTests;
         int testDuration=10000;
 
         System.out.println("Number of available processors: "+availableProcessors);
@@ -33,12 +33,10 @@ public class ScanOnlyBenchmark implements Test {
         for (int i = 0; i < numberOfTests; i++) {
 
             TestSet.fill(set,64000);
-            long start = System.currentTimeMillis();
             TestResult testResult = TestSet.runTest(set, numberOfThreads, numberOfScanThreads ,dataRange, 0, 0,1,32000,testDuration,true);
-            long finish = System.currentTimeMillis();
-            System.out.println("("+numberOfScanThreads +" "+ testResult.numberOfScannedKeys.longValue()+")");
-            numberOfThreads++;
-            numberOfScanThreads++;
+            System.out.print("("+numberOfScanThreads +","+ testResult.numberOfScannedKeys.longValue()+") ");
+            numberOfThreads*=2;
+            numberOfScanThreads*=2;
             this.set = ((SetFactory)set).newInstance();
         }
 

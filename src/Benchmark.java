@@ -1,9 +1,9 @@
 import benchmark.JavaConcurrentSkipList;
+import benchmark.occabtree.src.OCCABTreeSet;
 import benchmark.occabtreewithscan.src.OCCABTreeWithScanSet;
 
 public class Benchmark {
     public static void main(String[] args) {
-        int numberOfThreads = 80;
 
         System.out.println("WARMUP - START");
         var wu = new WarmupBenchmark(new MTASet(2,256),80,20,5,10);
@@ -60,10 +60,10 @@ public class Benchmark {
         var mtaSetScan3280insert320Delete = new InsertDeleteGetBenchmark(new MTASet(2,256),0,0,100,7);
         mtaSetScan3280insert320Delete.run();
         ;*/
-
-       /* System.out.println("MTASet");
+ /*
+        System.out.println("MTASet");
         var get9091 = new Get90Insert9Delete1(new MTASet(2,256));
-        get9091.run();*/
+        get9091.run();
 
 
         System.out.println("OCCABTreeWithScanSet");
@@ -73,7 +73,7 @@ public class Benchmark {
         System.out.println("JavaConcurrentSkipList");
         var get9091jcc = new Get90Insert9Delete1(new JavaConcurrentSkipList());
         get9091jcc.run();
-
+*/
 
 
       /*  System.out.println("MTASet");
@@ -83,6 +83,53 @@ public class Benchmark {
         System.out.println("JavaConcurrentSkipList");
         var jcs = new InsertDeleteGetBenchmark(new JavaConcurrentSkipList(),80,20,0,numberOfThreads);
         jcs.run();
+
+
 */
+
+        System.out.println("OCCABTreeWithScanSet SCAN");
+        var occAabws = new ScanOnlyBenchmark(new OCCABTreeWithScanSet(2,256),7);
+        occAabws.run();
+
+        System.out.println("MTASet SCAN");
+        var mtaso = new ScanOnlyBenchmark(new MTASet(2,256),7);
+        mtaso.run();
+
+        System.out.println("OCCABTreeWithScanSet GET");
+        var occabScanGet = new InsertDeleteGetBenchmark(new OCCABTreeWithScanSet(2,256),0,0,100,7);
+        occabScanGet.run();
+
+        System.out.println("OCCABTree GET");
+        var occabGet = new InsertDeleteGetBenchmark(new OCCABTreeSet(2,256),0,0,100,7);
+        occabGet.run();
+
+        System.out.println("mtaSet GET");
+        var mtaSet = new InsertDeleteGetBenchmark(new MTASet(2,256),0,0,100,7);
+        mtaSet.run();
+
+        System.out.println("OCCABTreeWithScanSet 80 INSERT");
+        var occabScan80 = new InsertDeleteGetBenchmark(new OCCABTreeWithScanSet(2,256),80,20,0,7);
+        occabScan80.run();
+
+        System.out.println("OCCABTree 80 INSERT");
+        var occabIns = new InsertDeleteGetBenchmark(new OCCABTreeSet(2,256),80,20,0,7);
+        occabIns.run();
+
+        System.out.println("mtaSet 80 INSERT");
+        var mtaSetN = new InsertDeleteGetBenchmark(new MTASet(2,256),80,20,0,7);
+        mtaSetN.run();
+
+        System.out.println("MTASet 9091");
+        var getMTASet9091 = new Get90Insert9Delete1(new MTASet(2,256));
+        getMTASet9091.run();
+
+        System.out.println("OCCABTreeWithScanSet 9091");
+        var get9091occs = new Get90Insert9Delete1(new OCCABTreeWithScanSet(2,256));
+        get9091occs.run();
+
+        System.out.println("OCCABTree 9091");
+        var get9091occ = new Get90Insert9Delete1(new OCCABTreeSet(2,256));
+        get9091occ.run();
+
     }
 }

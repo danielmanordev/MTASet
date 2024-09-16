@@ -60,14 +60,14 @@ public class OCCABTreeWithScan {
         if(currSize < this.maxNodeSize) {
             for (int i = 0; i < this.maxNodeSize; ++i) {
                 if (node.keys[i] == NULL) {
-                    int oldVersion = node.ver.get();
-                    node.ver.set(oldVersion+1);
+
+                    node.ver++;
                     updateInsert(node,i,new ValueCell(key,value,0,0));
                     // node.keys[i] = key;
                     // node.values[i] = value;
                     // node.insertionTimes[i] = TIMESTAMP;
                     // ++node.size;
-                    node.ver.set(oldVersion+2);
+                    node.ver++;
                     node.unlock();
                     return new Result(value,ReturnCode.SUCCESS);
                 }
@@ -339,10 +339,7 @@ public class OCCABTreeWithScan {
             } else {
                 return new Result(ReturnCode.FAILURE);
             }
-        } else {
-            KeyIndexValueVersionResult keyIndexValueVersionResult = getKeyIndexValueVersion(pathInfo.n,key);
-            return new Result(keyIndexValueVersionResult.getValue(),keyIndexValueVersionResult.getReturnCode());
-        }
+        } return new Result(ReturnCode.SUCCESS);
 
     }
 
@@ -353,13 +350,13 @@ public class OCCABTreeWithScan {
         int version;
 
         do {
-            while (((version = node.ver.get()) & 1) != 0) {}
+            while (((version = node.ver) & 1) != 0) {}
             keyIndex = 0;
             while (keyIndex < this.maxNodeSize && node.keys[keyIndex] != key) {
                 ++keyIndex;
             }
             value = keyIndex < this.maxNodeSize ? node.values[keyIndex] : null;
-        } while (node.ver.get() != version);
+        } while (node.ver != version);
         return value == null ? new KeyIndexValueVersionResult(NULL,NULL,ReturnCode.FAILURE) : new KeyIndexValueVersionResult(value.value,version,ReturnCode.SUCCESS);
 
     }
@@ -392,13 +389,13 @@ public class OCCABTreeWithScan {
         for (int i = 0; i < this.maxNodeSize; ++i) {
            if(node.keys[i] == key) {
                deletedValue = node.values[i].value;
-               int oldVersion = node.ver.get();
-               node.ver.set(oldVersion+1);
+
+               node.ver++;
                updateDelete(node,i, node.values[i]);
                //node.keys[i] = 0;
                //node.values[i] = 0;
                //node.size = newSize;
-               node.ver.set(oldVersion+2);
+               node.ver++;
 
                if(newSize == this.minNodeSize-1) {
                    node.unlock();
@@ -816,7 +813,7 @@ public class OCCABTreeWithScan {
             return new Result(NULL, ReturnCode.FAILURE);
         }
         while (true) {
-            int ver1 = leaf.ver.get();
+            int ver1 = leaf.ver;
             if (ver1 % 2 != 0) {
                 continue;
             }
@@ -828,7 +825,7 @@ public class OCCABTreeWithScan {
                     break;
                 }
             }
-            int ver2 = leaf.ver.get();
+            int ver2 = leaf.ver;
             if (ver1 != ver2) {
                 continue;
             }
@@ -1092,11 +1089,7 @@ public class OCCABTreeWithScan {
     public int find(int key) {
 
         PathInfo pathInfo = new PathInfo();
-        Result searchResult = search(key, null, pathInfo);
-
-        if(searchResult.getReturnCode() != ReturnCode.SUCCESS){
-            return NULL;
-        }
+        search(key, null, pathInfo);
 
         Node leaf = pathInfo.n;
         Result searchLeafResult = searchLeaf(leaf, key);
@@ -1108,11 +1101,12 @@ public class OCCABTreeWithScan {
     public int tryInsert(int key, int value) {
         PathInfo pathInfo = new PathInfo();
         while (true) {
-            Result searchResult = search(key,null,pathInfo);
-            if(searchResult.getReturnCode() == ReturnCode.SUCCESS){
-                return searchResult.getValue();
+            search(key, null, pathInfo);
+            Node leaf = pathInfo.n;
+            Result searchLeafResult = searchLeaf(leaf, key);
+            if(searchLeafResult.getValue() != NULL){
+                return searchLeafResult.getValue();
             }
-
             Result insertResult = insert(pathInfo,key,value);
 
             ReturnCode insertReturnCode = insertResult.getReturnCode();
@@ -1126,9 +1120,9 @@ public class OCCABTreeWithScan {
     public int tryDelete(int key) {
         PathInfo pathInfo = new PathInfo();
         while (true) {
-            Result searchResult = search(key, null, pathInfo);
-
-            if(searchResult.getReturnCode() == ReturnCode.FAILURE){
+            search(key, null, pathInfo);
+            var searchLeafResult = searchLeaf(pathInfo.n,key);
+            if(searchLeafResult.getReturnCode() == ReturnCode.FAILURE){
                 return NULL;
             }
 
