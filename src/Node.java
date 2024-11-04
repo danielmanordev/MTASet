@@ -24,8 +24,8 @@ public class Node {
 
     }
 
-    public Node left;
-    public Node right;
+    public volatile Node left;
+    public volatile Node right;
 
     public boolean isTagged = false;
     public int size;

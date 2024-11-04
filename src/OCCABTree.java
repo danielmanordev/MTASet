@@ -40,20 +40,6 @@ public class OCCABTree {
 
     }
 
-    private boolean isParentOf(Node parent, Node child){
-        /*if(child == null){
-            return true;
-        }
-        for(int i=0;i<parent.size;i++){
-            if(parent.nodes[i] != null){
-                if(parent.nodes[i] == child){
-                    return true;
-                }
-            }
-        }*/
-        return true;
-    }
-
     private Result insert(PathInfo pathInfo, int key, int value) {
         Node node = pathInfo.n;
         Node parent = pathInfo.p;
@@ -112,39 +98,13 @@ public class OCCABTree {
             // ###########################################################
 
             parent.lock();
-            boolean isRightMarked =false;
-            boolean isLeftMarked =false;
-            boolean isRightSameParent =true;
-            boolean isLeftSameParent =true;
 
             if(parent.isMarked()){
                 parent.unlock();
                 node.unlock();
                 return new Result(ReturnCode.RETRY);
             }
-            isRightSameParent = isParentOf(parent,node.right);
-            if(!isRightSameParent){
-                   // node.right.lock();
-                    isRightMarked = node.right.isMarked();
-            }
-            isLeftSameParent = isParentOf(parent,node.left);
-            if(!isLeftSameParent){
-                   // node.left.lock();
-                    isLeftMarked = node.left.isMarked();
-            }
 
-            if(isRightMarked || isLeftMarked) {
-                if(!isLeftSameParent){
-                    //node.left.unlock();
-                }
-
-                if(!isRightSameParent){
-                   // node.right.unlock();
-                }
-                parent.unlock();
-                node.unlock();
-                return new Result(ReturnCode.RETRY);
-            }
 
             // OVERFLOW
             // We do not have room for this key, we need to make new nodes so it fits
@@ -220,15 +180,6 @@ public class OCCABTree {
 
             parent.nodes[pathInfo.nIdx] = replacementNode;
             node.mark();
-
-            if(!isLeftSameParent){
-               // node.left.unlock();
-            }
-
-            if(!isRightSameParent){
-               // node.right.unlock();
-            }
-
             node.unlock();
             parent.unlock();
             fixTagged(replacementNode);
@@ -683,33 +634,6 @@ public class OCCABTree {
                int keyCounter = 0, ptrCounter = 0;
                if (left.isLeaf()) {
 
-                   isRightSameParent = isParentOf(parent,right.right);
-                   if(!isRightSameParent){
-                      // right.right.lock();
-                       isRightMarked = right.right.isMarked();
-                   }
-
-                   isLeftSameParent = isParentOf(parent,left.left);
-                   if(!isLeftSameParent){
-                //       left.left.lock();
-                       isLeftMarked = left.left.isMarked();
-                   }
-
-                   if(isRightMarked || isLeftMarked){
-                       if(!isRightSameParent){
-                      //     right.right.unlock();
-                       }
-                       if(!isLeftSameParent){
-                         //  left.left.unlock();
-                       }
-
-                       node.unlock();
-                       sibling.unlock();
-                       parent.unlock();
-                       gParent.unlock();
-                       continue;
-                   }
-
                    //duplicate code can be cleaned up, but it would make it far less readable...
                    Node newNodeExt = createExternalNode(true, size, node.searchKey);
                    for (int i = 0; i < this.maxNodeSize; i++) {
@@ -890,33 +814,6 @@ public class OCCABTree {
                boolean isRightSameParent=false,isLeftSameParent=false,isLeftMarked=false,isRightMarked=false;
                if (left.isLeaf()) {
 
-
-                   isRightSameParent = isParentOf(parent,right.right);
-                   if(!isRightSameParent){
-                     //  right.right.lock();
-                       isRightMarked = right.right.isMarked();
-                   }
-
-                   isLeftSameParent = isParentOf(parent,left.left);
-                   if(!isLeftSameParent){
-                      // left.left.lock();
-                       isLeftMarked = left.left.isMarked();
-                   }
-
-                   if(isRightMarked || isLeftMarked){
-                       if(!isRightSameParent){
-                         //  right.right.unlock();
-                       }
-                       if(!isLeftSameParent){
-                        //   left.left.unlock();
-                       }
-
-                       node.unlock();
-                       sibling.unlock();
-                       parent.unlock();
-                       gParent.unlock();
-                       continue;
-                   }
 
                    Node newLeftExt = createExternalNode(true, leftSize, 0);
 
