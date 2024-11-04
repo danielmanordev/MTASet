@@ -9,8 +9,8 @@ public class Node {
 
     private boolean marked;
     private boolean isLeaf = false;
-    public Node left;
-    public Node right;
+    public volatile Node left;
+    public volatile Node right;
 
     public boolean isTagged = false;
     private final boolean isEntry = false;
