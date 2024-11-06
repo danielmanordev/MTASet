@@ -42,7 +42,7 @@ public class Scan32KWithInsertsAndDeletesBenchmark {
 
             for (int i = 0; i < numberOfTests; i++) {
                 double ratePerSec =0.0;
-                for (int j=0;j<10;j++){
+                for (int j=0;j<2;j++){
                     TestSet.seed(set,dataRange,dataRange/2);
                     TestResult testResult = TestSet.runTest(set, numberOfThreads, numberOfScanThreads ,dataRange, perContains, perAdd,1,32000,testDuration,scanOnly);
                     double perSec = (testResult.numberOfScannedKeys.longValue()/10);
@@ -50,7 +50,7 @@ public class Scan32KWithInsertsAndDeletesBenchmark {
                     this.set = ((SetFactory)set).newInstance();
 
                 }
-                System.out.print("("+numberOfScanThreads +","+ ratePerSec/10 +") ");
+                System.out.print("("+numberOfScanThreads +","+ ratePerSec/2 +") ");
                 //numberOfThreads++;
                 numberOfScanThreads*=2;
 

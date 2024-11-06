@@ -152,20 +152,31 @@ public class OCCABTree {
 
             }
 
+            while (true){
+                node.canModifyLeftRightPointers = false;
 
-            left.left = node.left;
-            left.right = right;
-            right.left = left;
-            right.right = node.right;
+                if(node.right != null && !node.right.canModifyLeftRightPointers || node.left != null && !node.left.canModifyLeftRightPointers){
+                    node.canModifyLeftRightPointers = true;
+                    continue;
+                }
+                left.left = node.left;
+                left.right = right;
+                right.left = left;
+                right.right = node.right;
+                left.canModifyLeftRightPointers = false;
+                right.canModifyLeftRightPointers = false;
+                if(node.left != null){
+                    node.left.right = left;
+                }
 
-            if(node.left != null){
-                node.left.right = left;
+                if(node.right != null){
+                    node.right.left = right;
+                }
+                left.canModifyLeftRightPointers = true;
+                right.canModifyLeftRightPointers = true;
+                node.canModifyLeftRightPointers = true;
+                break;
             }
-
-            if(node.right != null){
-                node.right.left = right;
-            }
-
 
 
             Node replacementNode = createInternalNode(parent == entry, 2,  keyValues[leftSize].getKey());

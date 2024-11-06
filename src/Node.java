@@ -26,6 +26,7 @@ public class Node {
 
     public volatile Node left;
     public volatile Node right;
+    public volatile boolean canModifyLeftRightPointers = true;
 
     public boolean isTagged = false;
     public int size;
