@@ -640,7 +640,6 @@ public class OCCABTree {
                 */
 
                Node newNode;
-               boolean isRightSameParent=false,isLeftSameParent=false,isLeftMarked=false,isRightMarked=false;
                // create new node(s))
                int keyCounter = 0, ptrCounter = 0;
                if (left.isLeaf()) {
@@ -663,24 +662,34 @@ public class OCCABTree {
                        }
                    }
 
-                   newNodeExt.right = right.right;
-                   if(right.right != null) {
-                       right.right.left = newNodeExt;
-                   }
 
-                   newNodeExt.left = left.left;
-                   if(left.left != null) {
-                       left.left.right = newNodeExt;
-                   }
 
-                   if(!isRightSameParent){
-                     //  right.right.unlock();
-                   }
 
-                   if(!isLeftSameParent){
-                    //   left.left.unlock();
-                   }
+                   while (true){
+                       right.canModifyLeftRightPointers = false;
+                       left.canModifyLeftRightPointers = false;
+                       newNodeExt.canModifyLeftRightPointers = false;
+                       if(right.right != null && !right.right.canModifyLeftRightPointers || left.left != null && !left.left.canModifyLeftRightPointers){
+                           right.canModifyLeftRightPointers = true;
+                           left.canModifyLeftRightPointers = true;
+                           continue;
+                       }
+                       newNodeExt.right = right.right;
+                       if(right.right != null) {
+                           right.right.left = newNodeExt;
+                       }
 
+                       newNodeExt.left = left.left;
+                       if(left.left != null) {
+                           left.left.right = newNodeExt;
+                       }
+
+                       left.canModifyLeftRightPointers = true;
+                       right.canModifyLeftRightPointers = true;
+                       newNodeExt.canModifyLeftRightPointers = true;
+
+                       break;
+                   }
 
                    newNode = newNodeExt;
                } else {
@@ -822,27 +831,38 @@ public class OCCABTree {
                keyCounter = 0;
                valCounter = 0;
                int pivot;
-               boolean isRightSameParent=false,isLeftSameParent=false,isLeftMarked=false,isRightMarked=false;
+
                if (left.isLeaf()) {
-
-
                    Node newLeftExt = createExternalNode(true, leftSize, 0);
-
-                   newLeftExt.right = left.right;
-                   if(left.right!=null) {
-                       left.right.left = newLeftExt;
-                   }
-
-                   newLeftExt.left = left.left;
-                   if(left.left!=null) {
-                       left.left.right = newLeftExt;
-                   }
-
                    for (int i = 0; i < leftSize; i++) {
                        newLeftExt.keys[i] = keyValues[keyCounter++].key;
                        newLeftExt.values[i] = keyValues[valCounter++].valueCell;
-
                    }
+
+                   while (true){
+                       left.canModifyLeftRightPointers = false;
+                       newLeftExt.canModifyLeftRightPointers = false;
+
+                       if(left.right != null && ! left.right.canModifyLeftRightPointers || left.left != null && !left.left.canModifyLeftRightPointers){
+                           left.canModifyLeftRightPointers = true;
+                           newLeftExt.canModifyLeftRightPointers = true;
+                           continue;
+                       }
+                       newLeftExt.right = left.right;
+                       if(left.right!=null) {
+                           left.right.left = newLeftExt;
+                       }
+
+                       newLeftExt.left = left.left;
+                       if(left.left!=null) {
+                           left.left.right = newLeftExt;
+                       }
+
+                       left.canModifyLeftRightPointers = true;
+                       newLeftExt.canModifyLeftRightPointers = true;
+                       break;
+                   }
+
 
 
                    newLeft = newLeftExt;
@@ -863,11 +883,14 @@ public class OCCABTree {
                }
 
                // reserve one key for the parent (to go between newleft and newright))
-
                int index = left.isLeaf() ? 0 : 1;
                if (right.isLeaf()) {
 
                    Node newRightExt = createExternalNode( true, rightSize, 0);
+                   for (int i = 0; i < rightSize; i++) {
+                       newRightExt.keys[i] = keyValues[keyCounter++].key;
+                       newRightExt.values[i] = keyValues[valCounter++].valueCell;
+                   }
 
                    newRightExt.right = right.right;
                    if(right.right!=null) {
@@ -879,14 +902,35 @@ public class OCCABTree {
                        right.left.right = newRightExt;
                    }
 
-                   for (int i = 0; i < rightSize - index; i++) {
-                       newRightExt.keys[i] = keyValues[keyCounter++].key;
+                   while (true){
+                       right.canModifyLeftRightPointers = false;
+                       newRightExt.canModifyLeftRightPointers = false;
+
+                       if(right.right != null && !right.right.canModifyLeftRightPointers || right.left != null && !right.left.canModifyLeftRightPointers){
+                           left.canModifyLeftRightPointers = true;
+                           newRightExt.canModifyLeftRightPointers = true;
+                           continue;
+                       }
+                       newRightExt.right = right.right;
+                       if(right.right!=null) {
+                           right.right.left = newRightExt;
+                       }
+
+                       newRightExt.left = right.left;
+                       if(right.left!=null) {
+                           right.left.right = newRightExt;
+                       }
+
+                       right.canModifyLeftRightPointers = true;
+                       newRightExt.canModifyLeftRightPointers = true;
+                       break;
                    }
+
+
+
                    newRight = newRightExt;
                    newRight.searchKey = newRightExt.keys[0]; // TODO: verify searchKey setting is same as llx/scx based version
-                   for (int i = 0; i < rightSize; i++) {
-                       newRight.values[i] = keyValues[valCounter++].valueCell;
-                   }
+
                } else {
                    Node newRightInt = createInternalNode(true, rightSize, 0);
                    for (int i = 0; i < rightSize - index; i++) {
@@ -912,13 +956,7 @@ public class OCCABTree {
                node.mark();
                parent.mark();
                sibling.mark();
-               if(!isRightSameParent){
-                 //  right.right.unlock();
-               }
 
-               if(!isLeftSameParent){
-                 //  left.left.unlock();
-               }
                node.unlock();
                sibling.unlock();
                parent.unlock();
