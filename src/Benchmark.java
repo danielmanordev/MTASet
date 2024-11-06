@@ -86,6 +86,9 @@ public class Benchmark {
 
 
 */
+        System.out.println("MTASet SCAN WITH UPDATES");
+        var s32i80d20 = new Scan32KWithInsertsAndDeletesBenchmark(new MTASet(2,256),80,20,16,5);
+        s32i80d20.run();
 
         System.out.println("OCCABTreeWithScanSet SCAN");
         var occAabws = new ScanOnlyBenchmark(new OCCABTreeWithScanSet(2,256),7);

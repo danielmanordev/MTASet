@@ -5,13 +5,14 @@ import benchmark.Test;
 public class Scan32KWithInsertsAndDeletesBenchmark {
 
         Set set;
-        int insertPercent, deletePercent, maxNumberOfScanThreads;
+        int insertPercent, deletePercent, maxNumberOfScanThreads, numberOfTests;
 
-        public Scan32KWithInsertsAndDeletesBenchmark(Set set, int insertPercent, int deletePercent, int maxNumberOfScanThreads){
+        public Scan32KWithInsertsAndDeletesBenchmark(Set set, int insertPercent, int deletePercent, int maxNumberOfScanThreads, int numberOfTests){
             this.set = set;
             this.insertPercent = insertPercent;
             this.deletePercent = deletePercent;
             this.maxNumberOfScanThreads = maxNumberOfScanThreads;
+            this.numberOfTests = numberOfTests;
         }
 
         public void run(){
@@ -19,7 +20,7 @@ public class Scan32KWithInsertsAndDeletesBenchmark {
             int dataRange = 1000000;
             int numberOfThreads = maxNumberOfScanThreads;
             int numberOfScanThreads = 1;//Integer.parseInt(args[0]);
-            int numberOfTests = 7;//maxNumberOfScanThreads;
+            int numberOfTests = this.numberOfTests;//maxNumberOfScanThreads;
             int testDuration=10000;
             int perAdd=this.insertPercent;
             int perContains=0;
