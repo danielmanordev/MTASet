@@ -90,6 +90,10 @@ public class Benchmark {
         var s32i80d20 = new Scan32KWithInsertsAndDeletesBenchmark(new MTASet(2,256),80,20,16,5);
         s32i80d20.run();
 
+        /*System.out.println("MTASet SCAN");
+        var mtaso = new ScanOnlyBenchmark(new MTASet(2,256),7);
+        mtaso.run();
+
         System.out.println("OCCABTreeWithScanSet SCAN");
         var occAabws = new ScanOnlyBenchmark(new OCCABTreeWithScanSet(2,256),7);
         occAabws.run();
@@ -132,7 +136,7 @@ public class Benchmark {
 
         System.out.println("OCCABTree 9091");
         var get9091occ = new Get90Insert9Delete1(new OCCABTreeSet(2,256));
-        get9091occ.run();
+        get9091occ.run();*/
 
     }
 }
