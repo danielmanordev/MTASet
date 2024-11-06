@@ -86,19 +86,27 @@ public class Benchmark {
 
 
 */
-        System.out.println("MTASet SCAN WITH UPDATES");
+        /*System.out.println("MTASet SCAN WITH UPDATES");
         var s32i80d20 = new Scan32KWithInsertsAndDeletesBenchmark(new MTASet(2,256),80,20,16,5);
-        s32i80d20.run();
+        s32i80d20.run();*/
 
-        System.out.println("OCCABTreeWithScanSet SCAN");
-        var occAabws = new ScanOnlyBenchmark(new OCCABTreeWithScanSet(2,256),7);
-        occAabws.run();
+        /*System.out.println("OCCABTreeWithScanSet SCAN 2 256");
+        var occAabws1 = new ScanOnlyBenchmark(new OCCABTreeWithScanSet(2,256),7);
+        occAabws1.run();
 
-        System.out.println("MTASet SCAN");
-        var mtaso = new ScanOnlyBenchmark(new MTASet(2,256),7);
-        mtaso.run();
+        System.out.println("MTASet SCAN 2 256");
+        var mtaso1 = new ScanOnlyBenchmark(new MTASet(2,256),7);
+        mtaso1.run();
 
-        System.out.println("OCCABTreeWithScanSet GET");
+        System.out.println("OCCABTreeWithScanSet SCAN 8 512");
+        var occAabws2 = new ScanOnlyBenchmark(new OCCABTreeWithScanSet(8,512),7);
+        occAabws2.run();
+
+        System.out.println("MTASet SCAN 8 512");
+        var mtaso2 = new ScanOnlyBenchmark(new MTASet(8,512),7);
+        mtaso2.run();
+
+        /*System.out.println("OCCABTreeWithScanSet GET");
         var occabScanGet = new InsertDeleteGetBenchmark(new OCCABTreeWithScanSet(2,256),0,0,100,7);
         occabScanGet.run();
 
@@ -114,6 +122,8 @@ public class Benchmark {
         var occabScan80 = new InsertDeleteGetBenchmark(new OCCABTreeWithScanSet(2,256),80,20,0,7);
         occabScan80.run();
 
+
+         */
         System.out.println("OCCABTree 80 INSERT");
         var occabIns = new InsertDeleteGetBenchmark(new OCCABTreeSet(2,256),80,20,0,7);
         occabIns.run();

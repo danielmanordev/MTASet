@@ -30,15 +30,23 @@ public class ScanOnlyBenchmark implements Test {
         System.out.println("Scan Only, Starting....");
 
 
-        for (int i = 0; i < numberOfTests; i++) {
+         for (int i = 0; i < numberOfTests; i++) {
+             double ratePerSec =0.0;
+             for (int j=0;j<10;j++){
+                 TestSet.seed(set,dataRange,dataRange/2);
+                 TestResult testResult = TestSet.runTest(set, numberOfThreads, numberOfScanThreads ,dataRange, 0, 0,1,32000,testDuration,true);
+                 double perSec = (testResult.numberOfScannedKeys.longValue()/10);
+                 ratePerSec += (perSec/1000000);
+                 this.set = ((SetFactory)set).newInstance();
 
-            TestSet.fill(set,64000);
-            TestResult testResult = TestSet.runTest(set, numberOfThreads, numberOfScanThreads ,dataRange, 0, 0,1,32000,testDuration,true);
-            System.out.print("("+numberOfScanThreads +","+ testResult.numberOfScannedKeys.longValue()+") ");
-            numberOfThreads*=2;
-            numberOfScanThreads*=2;
-            this.set = ((SetFactory)set).newInstance();
-        }
+             }
+             System.out.print("("+numberOfScanThreads +","+ ratePerSec/10 +") ");
+             numberOfThreads*=2;
+             numberOfScanThreads*=2;
+
+             //System.out.println(((SetFactory)this.set).getName());
+
+         }
 
 
         }
