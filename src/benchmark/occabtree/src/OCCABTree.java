@@ -171,9 +171,11 @@ public class OCCABTree {
     private Result tryInsert(int key, int value) {
         PathInfo pathInfo = new PathInfo();
         while (true) {
-            var findResult = find(key);
-            if(findResult.getReturnCode() == ReturnCode.SUCCESS){
-                return findResult;
+            search(key, null, pathInfo);
+            Node leaf = pathInfo.n;
+            Result searchLeafResult = searchLeaf(leaf, key);
+            if(searchLeafResult.getValue() != NULL){
+                return searchLeafResult;
             }
 
             Result insertResult = insert(pathInfo,key,value);
