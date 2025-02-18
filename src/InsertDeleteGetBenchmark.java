@@ -33,7 +33,7 @@ public class InsertDeleteGetBenchmark implements Test {
             for (int j=0;j<10;j++){
                 TestSet.seed(set,dataRange,dataRange/2);
                 TestResult testResult = TestSet.runTest(set, numberOfThreads, 0 ,dataRange, perContains, perAdd,1,32000,testDuration,false);
-                double perSec = (testResult.TotalContains.longValue()/10);
+                double perSec = (testResult.TotalAdds.longValue()/10);
                /* System.out.println(testResult.TotalAdds);
                 System.out.println(testResult.TotalRemoves);
                 System.out.println(testResult.TotalContains);*/
