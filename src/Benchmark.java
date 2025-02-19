@@ -88,20 +88,28 @@ public class Benchmark {
 */
 
         System.out.println("InsertWithScanDeleteGetBenchmark 80 10 10 + SCAN OCCABTreeWithScanSet");
-        var occAabws = new InsertWithScanDeleteGetBenchmark(new OCCABTreeWithScanSet(2,256), 80, 10, 10 ,5);
+        var occAabws = new InsertWithScanDeleteGetBenchmark(new OCCABTreeWithScanSet(2,256), 80, 10, 10 ,7);
         occAabws.run();
 
         System.out.println("InsertWithScanDeleteGetBenchmark 80 10 10 + SCAN MTASet");
-        var mtaso = new InsertWithScanDeleteGetBenchmark(new MTASet(2,256),80, 10, 10 ,5);
+        var mtaso = new InsertWithScanDeleteGetBenchmark(new MTASet(2,256),80, 10, 10 ,7);
         mtaso.run();
 
+        System.out.println("InsertWithScanDeleteGetBenchmark 50 5 45 + SCAN SkipList");
+        var jcs = new InsertWithScanDeleteGetBenchmark(new JavaConcurrentSkipList(),80, 10, 10 ,7);
+        jcs.run();
+
         System.out.println("InsertWithScanDeleteGetBenchmark 50 5 45 + SCAN OCCABTreeWithScanSet");
-        var occAabws2 = new InsertWithScanDeleteGetBenchmark(new OCCABTreeWithScanSet(2,256), 50, 5, 45 ,5);
+        var occAabws2 = new InsertWithScanDeleteGetBenchmark(new OCCABTreeWithScanSet(2,256), 50, 5, 45 ,7);
         occAabws2.run();
 
         System.out.println("InsertWithScanDeleteGetBenchmark 50 5 45 + SCAN MTASet");
-        var mtaso2 = new InsertWithScanDeleteGetBenchmark(new MTASet(2,256),50, 5, 45 ,5);
+        var mtaso2 = new InsertWithScanDeleteGetBenchmark(new MTASet(2,256),50, 5, 45 ,7);
         mtaso2.run();
+
+        System.out.println("InsertWithScanDeleteGetBenchmark 50 5 45 + SCAN SkipList");
+        var jcs2 = new InsertWithScanDeleteGetBenchmark(new JavaConcurrentSkipList(),50, 5, 45 ,7);
+        jcs2.run();
 
         /*System.out.println("OCCABTreeWithScanSet SCAN");
         var occAabws = new ScanOnlyBenchmark(new OCCABTreeWithScanSet(2,256),7);

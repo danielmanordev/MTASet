@@ -65,10 +65,7 @@ public class InsertWithScanDeleteGetBenchmark implements Test {
             String containsResult = "("+numberOfThreads +","+ ratePerSecContains/10 +"),";
             String scanResult = "("+16 +","+ ratePerSecScan/10 +"),";
 
-            System.out.print(addResult);
-            System.out.print(deleteResult);
-            System.out.print(containsResult);
-            System.out.print(scanResult);
+            System.out.print("ok");
 
 
             ratePerSecAddList.add(addResult);
